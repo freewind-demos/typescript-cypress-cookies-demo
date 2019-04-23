@@ -1,39 +1,26 @@
-import {add} from '../../add'
+function login() {
+  cy.visit('/login');
+}
 
-describe('TypeScript', () => {
-  it('works', () => {
-    // note TypeScript definition
-    const x: number = 42
+describe('Cookies', () => {
+  before(() => {
+    Cypress.Cookies.debug(true);
+    // Notice: if not preserve the cookie 'token',
+    // the 2nd test will fail
+    Cypress.Cookies.preserveOnce('token');
+  });
+
+  before(() => {
+    login();
   })
 
-  it('checks shape of an object', () => {
-    const object = {
-      age: 21,
-      name: 'Joe',
-    }
-    expect(object).to.have.all.keys('name', 'age')
+  it('should get cookies correctly', () => {
+    cy.getCookie('token').should('have.property', 'value', '123456');
   })
 
-  it('uses cy commands', () => {
-    cy.wrap({}).should('deep.eq', {})
+  it('should send existing cookies to server', () => {
+    cy.request('/manage')
+      .then((res) => res.body)
+      .should('have.property', 'token', '123456');
   })
-
-  it('tests our example site', () => {
-    cy.visit('https://example.cypress.io/')
-    cy.get('.home-list')
-      .contains('Querying')
-      .click()
-    cy.get('#query-btn').should('contain', 'Button')
-  })
-
-  // enable once we release updated TypeScript definitions
-  it('has Cypress object type definition', () => {
-    expect(Cypress.version).to.be.a('string')
-  })
-
-
-  it('adds numbers', () => {
-    expect(add(2, 3)).to.equal(5)
-  })
-
 })

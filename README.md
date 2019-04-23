@@ -1,15 +1,20 @@
-TypeScript Cypress Test Demo
+TypeScript Cypress Cookies Demo
 =========================================
 
-注意点：
-
-1. `cypress/plugins/index.js`不能使用`.ts`，所以`webpack.config.js`也不能使用`.ts`
-2. 由于混用了`.js`与`.ts`，所以webpack中要设置`resolve`->`extensions`
-3. `tsconfig.json`中一定要设置`"types": [ "cypress" ]`，否则`cy`等typing找不到
+Cypress默认在每一个测试运行之前都清空cookies。如果想保留某些cookie（比如登录之后的token），
+可以调用`Cypress.Cookies.preserveOnce`来指定cookie name.
 
 ```
 npm install
-npm run test:open
+```
 
+启动server:
+```
+npm run server
+```
+
+运行测试：
+```
+npm run test:open
 npm run test:run
 ```
